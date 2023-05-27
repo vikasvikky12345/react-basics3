@@ -16,6 +16,7 @@ const AddUser = (props) => {
     const enteredName = nameInputRef.current.value;
     const enteredUserAge = ageInputRef.current.value;
     const eneteredCollege = collegeRef.current.value
+    
     if(enteredName.trim().length === 0 || enteredUserAge.trim().length === 0 || eneteredCollege.trim().length === 0){
       setError({
         title: 'Invalid input',
