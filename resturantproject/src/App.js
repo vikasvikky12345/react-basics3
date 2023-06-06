@@ -1,10 +1,18 @@
-import Header from "./Components/Layout/Header"
+import { Fragment } from 'react';
+import Meals from './Components/Meals/Meals';
+import Header from './Components/Layout/Header';
 
-const App =()=>{
-  return(
+
+
+function App() {
+  return (
     <>
-    <Header/>
+      <Header/>
+      <main>
+        <Meals/>
+      </main>
     </>
-  )
+  );
 }
+
 export default App;
