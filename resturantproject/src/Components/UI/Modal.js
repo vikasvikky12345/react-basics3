@@ -1,10 +1,10 @@
-
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import styles from './Modal.module.css';
 
-const Backdrop = () => {
-  return <div className={styles.backdrop} />;
+const Backdrop = ({onHide}) => {
+  return <div className={styles.backdrop} onClick={onHide}/>;
 };
 
 const ModalOverlay = (props) => {
@@ -17,10 +17,10 @@ const ModalOverlay = (props) => {
 
 const portalElement = document.getElementById('overlays');
 
-const Modal = (props) => {
+const Modal = (props,{onHide}) => {
   return (
     <>
-      {ReactDOM.createPortal(<Backdrop />, portalElement)}
+      {ReactDOM.createPortal(<Backdrop onHide={onHide}/>, portalElement)}
       {ReactDOM.createPortal(
         <ModalOverlay>{props.children}</ModalOverlay>,
         portalElement
