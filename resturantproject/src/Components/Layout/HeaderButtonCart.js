@@ -1,9 +1,6 @@
 import React from 'react';
 import styles from './HeaderButtoncart.module.css';
 import CartIcon from '../Cart/CartIcon';
-
-// Rest of the code...
-
 function HeaderButtonCart() {
   return (
     <>
