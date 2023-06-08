@@ -3,24 +3,24 @@ import ReactDOM from 'react-dom';
 
 import styles from './Modal.module.css';
 
-const Backdrop = ({onHide}) => {
-  return <div className={styles.backdrop} onClick={onHide}/>;
+const Backdrop = ({onClose}) => {
+  return <div className={styles.backdrop} onClick = {onClose}/>;
 };
 
-const ModalOverlay = (props) => {
+const ModalOverlay = ({children}) => {
   return (
     <div className={styles.modal}>
-      <div className={styles.content}>{props.children}</div>
+      <div className={styles.content}>{children}</div>
     </div>
   );
 };
 
 const portalElement = document.getElementById('overlays');
 
-const Modal = ({onHide,children}) => {
+const Modal = ({children,onClose}) => {
   return (
     <>
-      {ReactDOM.createPortal(<Backdrop onHide={onHide}/>, portalElement)}
+      {ReactDOM.createPortal(<Backdrop onClose = {onClose}/>, portalElement)}
       {ReactDOM.createPortal(
         <ModalOverlay>{children}</ModalOverlay>,
         portalElement
