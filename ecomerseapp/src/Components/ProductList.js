@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container, Card } from 'react-bootstrap';
+import { CartContext } from '../Store/CartContext';
 
-const ProductList = ({ products, addToCart }) => {
+const ProductList = ({ products }) => {
+  const { addToCart } = useContext(CartContext);
+
   return (
     <Container className="mt-4">
       <div className="row">
