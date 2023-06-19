@@ -1,17 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { Navbar, Nav, Button } from 'react-bootstrap';
 import { CartContext } from '../Store/CartContext';
+import styles from './Header.module.css'
 
 const Header = ({ toggleCart }) => {
-  const { cartCount } = useContext(CartContext);
+  const { cartCount } = React.useContext(CartContext);
 
   return (
     <div>
       <Navbar bg="dark" variant="dark" expand="lg" className="d-flex justify-content-between">
         <Nav>
-          <Nav.Link href="#">Home</Nav.Link>
-          <Nav.Link href="#">Store</Nav.Link>
-          <Nav.Link href="#">About</Nav.Link>
+          <NavLink exact to="/" activeClassName={styles['active-navlink']}>
+            Home
+          </NavLink>
+          <NavLink to="/about" activeClassName={styles['active-navlink']}>
+            About
+          </NavLink>
         </Nav>
         <Button variant="primary" onClick={toggleCart}>
           Cart ({cartCount})

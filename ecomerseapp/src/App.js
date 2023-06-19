@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import Header from './Components/Header';
 import Title from './Components/Title';
 import ProductList from './Components/ProductList';
@@ -15,38 +16,51 @@ const App = () => {
 
   const products = [
     {
-        title: 'Colors',
-        price: 100,
-        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
+      title: 'Colors',
+      price: 100,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
     },
     {
-        title: 'Black and white Colors',
-        price: 50,
-        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
+      title: 'Black and white Colors',
+      price: 50,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
     },
     {
-        title: 'Yellow and Black Colors',
-        price: 70,
-        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
+      title: 'Yellow and Black Colors',
+      price: 70,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
     },
     {
-        title: 'Blue Color',
-        price: 100,
-        imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
-    }
+      title: 'Blue Color',
+      price: 100,
+      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
+    },
   ];
 
   return (
     <CartProvider>
-      <div>
-        <Header toggleCart={toggleCart} />
-        <Title />
-        <ProductList products={products} />
-        {showCart && <Cart toggleCart={toggleCart} />}
-        <Footer />
-      </div>
+      <Router>
+        <div>
+          <Header toggleCart={toggleCart} />
+          <Title />
+          <Routes>
+            <Route path="/" element={<ProductList products={products} />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+          {showCart && <Cart toggleCart={toggleCart} />}
+          <Footer />
+        </div>
+      </Router>
     </CartProvider>
   );
 };
 
+const AboutPage = () => {
+  return (
+    <div>
+      <h2>About Us</h2>
+      <p>Add your About Us content here.</p>
+    </div>
+  );
+};
 export default App;
