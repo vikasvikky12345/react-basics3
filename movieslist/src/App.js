@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MoviesList from './Components/MoviesList';
+import AddMovie from './Components/AddMovie';
 
 import './App.css';
 
@@ -32,7 +33,6 @@ function App() {
       setMovies(transformedMovies);
     } catch (error) {
       if (retryCount < 3 && isRetrying) {
-        // Retry after 5 seconds
         setTimeout(() => {
           setRetryCount((prevRetryCount) => prevRetryCount + 1);
         }, 5000);
@@ -62,6 +62,9 @@ function App() {
     setIsRetrying(false);
     setRetryCount(0);
   };
+  function addMovieHandler(movie) {
+    console.log(movie);
+  }
 
   let content = <p>Found no movies.</p>;
 
@@ -86,6 +89,9 @@ function App() {
 
   return (
     <React.Fragment>
+      <section>
+        <AddMovie onAddMovie={addMovieHandler} />
+      </section>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
