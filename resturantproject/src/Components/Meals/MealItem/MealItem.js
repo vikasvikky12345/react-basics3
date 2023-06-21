@@ -16,6 +16,7 @@ const MealItem = ({price,name,description,id}) => {
       name: name,
       amount: amount,
       price: price,
+      description:description
     });
   };
 

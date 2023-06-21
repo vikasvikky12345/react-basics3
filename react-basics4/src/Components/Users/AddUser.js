@@ -6,11 +6,11 @@ import classes from './AddUser.module.css';
 import ErrorModal from '../UI/ErrorModal';
 
 
-const AddUser = (props) => {
+const AddUser = ({onAddUser}) => {
   const nameInputRef = useRef();
   const ageInputRef = useRef();
   const collegeRef = useRef();
-    const [error, setError] = useState();
+  const [error, setError] = useState();
   const addUserHandler = (event) => {
     event.preventDefault()
     const enteredName = nameInputRef.current.value;
@@ -32,7 +32,7 @@ const AddUser = (props) => {
       return;
     }
     event.preventDefault();
-    props.onAddUser(enteredName,enteredUserAge,eneteredCollege)
+    onAddUser(enteredName,enteredUserAge,eneteredCollege)
     nameInputRef.current.value = '';
     ageInputRef.current.value = '';
     collegeRef.current.value = '';
