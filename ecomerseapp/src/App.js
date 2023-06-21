@@ -1,66 +1,41 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
-import Header from './Components/Header';
-import Title from './Components/Title';
-import ProductList from './Components/ProductList';
-import Footer from './Components/Footer';
-import Cart from './Components/Cart';
-import { CartProvider } from './Store/CartContext';
+import React, { useState } from 'react';
 
-const App = () => {
-  const [showCart, setShowCart] = React.useState(false);
+import MoviesList from './Components/MoviesList';
+import './App.css';
 
-  const toggleCart = () => {
-    setShowCart(!showCart);
-  };
+function App() {
+  const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const products = [
-    {
-      title: 'Colors',
-      price: 100,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
-    },
-    {
-      title: 'Black and white Colors',
-      price: 50,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
-    },
-    {
-      title: 'Yellow and Black Colors',
-      price: 70,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
-    },
-    {
-      title: 'Blue Color',
-      price: 100,
-      imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
-    },
-  ];
+  async function fetchMoviesHandler() {
+    setIsLoading(true);
+    const response = await fetch('https://swapi.dev/api/films/');
+    const data = await response.json();
+
+    const transformedMovies = data.results.map((movieData) => {
+      return {
+        id: movieData.episode_id,
+        title: movieData.title,
+        openingText: movieData.opening_crawl,
+        releaseDate: movieData.release_date,
+      };
+    });
+    setMovies(transformedMovies);
+    setIsLoading(false);
+  }
 
   return (
-    <CartProvider>
-      <Router>
-        <div>
-          <Header toggleCart={toggleCart} />
-          <Title />
-          <Routes>
-            <Route path="/" element={<ProductList products={products} />} />
-            <Route path="/about" element={<AboutPage />} />
-          </Routes>
-          {showCart && <Cart toggleCart={toggleCart} />}
-          <Footer />
-        </div>
-      </Router>
-    </CartProvider>
+    <>
+      <section>
+        <button onClick={fetchMoviesHandler}>Fetch Movies</button>
+      </section>
+      <section>
+        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
+        {!isLoading && movies.length === 0 && <p>Found no movies.</p>}
+        {isLoading && <p>Loading...</p>}
+      </section>
+    </>
   );
-};
+}
 
-const AboutPage = () => {
-  return (
-    <div>
-      <h2>About Us</h2>
-      <p>Add your About Us content here.</p>
-    </div>
-  );
-};
 export default App;
