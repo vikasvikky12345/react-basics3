@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Header from './Components/Header';
@@ -8,10 +9,10 @@ import Cart from './Components/Cart';
 import { CartProvider } from './Store1/CartContext';
 import About from './Components/About';
 import Home from './Components/Home';
+import ContactUs from './Components/ContactUs';
 
 const App = () => {
   const [showCart, setShowCart] = useState(false);
-
   const toggleCart = () => {
     setShowCart(!showCart);
   };
@@ -43,12 +44,13 @@ const App = () => {
     <BrowserRouter>
       <div>
         <CartProvider>
-          <Header toggleCart={toggleCart}/>
+          <Header toggleCart={toggleCart} />
           <Title />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/store" element={<ProductList products={products}/>} />
+            <Route path="/store" element={<ProductList products={products} />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<ContactUs />} />
           </Routes>
           {showCart && <Cart toggleCart={toggleCart} />}
         </CartProvider>

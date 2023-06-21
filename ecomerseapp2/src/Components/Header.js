@@ -1,3 +1,4 @@
+
 import React,{useContext} from 'react';
 import { Button } from 'react-bootstrap';
 import { CartContext } from '../Store1/CartContext';
@@ -9,10 +10,12 @@ const Header = ({ toggleCart }) => {
   const homeMatch = useMatch('/');
   const storeMatch = useMatch('/store');
   const aboutMatch = useMatch('/about');
+  const contactMatch = useMatch('/contact'); 
 
   const homePath = useResolvedPath('/');
   const storePath = useResolvedPath('/store');
   const aboutPath = useResolvedPath('/about');
+  const contactPath = useResolvedPath('/contact'); 
 
   return (
     <header>
@@ -31,6 +34,11 @@ const Header = ({ toggleCart }) => {
           <li>
             <Link to={aboutPath} className={aboutMatch ? 'active' : ''}>
               About
+            </Link>
+          </li>
+          <li> 
+            <Link to={contactPath} className={contactMatch ? 'active' : ''}>
+              Contact
             </Link>
           </li>
         </ul>
