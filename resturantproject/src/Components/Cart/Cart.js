@@ -5,31 +5,30 @@ import CartItem from './CartItem';
 import styles from './Cart.module.css';
 import CartContext from '../../Store/CartContext';
 
+const Cart = ({ onClose }) => {
+  const { totalAmount, items, removeItem, addItem } = useContext(CartContext);
 
-const Cart = ({onClose}) => {
-  const cartContext1 = useContext(CartContext);
-
-  const totalAmount = `$${cartContext1.totalAmount.toFixed(2)}`;
-  const hasItems = cartContext1.items.length > 0;
+  const totalAmountFormatted = `$${totalAmount.toFixed(2)}`;
+  const hasItems = items.length > 0;
 
   const cartItemRemoveHandler = (id) => {
-    cartContext1.removeItem(id);
+    removeItem(id);
   };
 
   const cartItemAddHandler = (item) => {
-    cartContext1.addItem({...item, amount: 1});
+    addItem({ ...item, amount: 1 });
   };
 
   const cartItems = (
     <ul className={styles['cart-items']}>
-      {cartContext1.items.map((item) => (
+      {items.map((item) => (
         <CartItem
           key={item.id}
           name={item.name}
           amount={item.amount}
           price={item.price}
-          onRemove={cartItemRemoveHandler.bind(null, item.id)}
-          onAdd={cartItemAddHandler.bind(null, item)}
+          onRemove={() => cartItemRemoveHandler(item.id)}
+          onAdd={() => cartItemAddHandler(item)}
         />
       ))}
     </ul>
@@ -40,7 +39,7 @@ const Cart = ({onClose}) => {
       {cartItems}
       <div className={styles.total}>
         <span>Total Amount</span>
-        <span>{totalAmount}</span>
+        <span>{totalAmountFormatted}</span>
       </div>
       <div className={styles.actions}>
         <button className={styles['button--alt']} onClick={onClose}>
