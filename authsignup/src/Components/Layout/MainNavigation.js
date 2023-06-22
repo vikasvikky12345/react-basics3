@@ -1,8 +1,15 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Link, useMatch,useResolvedPath } from 'react-router-dom';
 import classes from './MainNavigation.module.css';
+import AuthContext from '../../Store/authContex';
+
+
 
 const MainNavigation = () => {
+
+    const authCtx = useContext(AuthContext);
+    const isLoggedIn = authCtx.isLoggedIn;
   const homeMatch = useMatch('/');
   const authMatch = useMatch('/auth');
   const profileMatch = useMatch('/profile');
@@ -18,19 +25,25 @@ const MainNavigation = () => {
       </Link>
       <nav>
         <ul>
+        {!isLoggedIn && (
           <li>
             <Link to={authPath} className={authMatch && classes.activeLink}>
               Login
             </Link>
           </li>
+        )}
+        {isLoggedIn && (
           <li>
             <Link to={profilePath} className={profileMatch && classes.activeLink}>
               Profile
             </Link>
           </li>
+        )}
+        {isLoggedIn && (
           <li>
             <button>Logout</button>
           </li>
+        )}
         </ul>
       </nav>
     </header>
