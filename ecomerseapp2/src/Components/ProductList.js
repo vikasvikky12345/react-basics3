@@ -1,12 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Product from './Product';
 import './ProductList.css';
 
 const ProductList = ({ products }) => {
   return (
     <div className="product-list">
-      {products.map((product) => (
-        <Product key={product.id} product={product} />
+      {products.map((product, index) => (
+        <Link to={`/product/${index}`} key={index} state={{ product }}>
+          <Product product={product} />
+        </Link>
       ))}
     </div>
   );
