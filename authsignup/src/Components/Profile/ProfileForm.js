@@ -1,10 +1,11 @@
 import { useRef, useContext } from 'react';
-
-
+import { useNavigate } from 'react-router-dom';
 import classes from './ProfileForm.module.css';
 import AuthContext from '../../Store/authContex';
 
+
 const ProfileForm = () => {
+  const navigate = useNavigate();
   const newPasswordInputRef = useRef();
   const authCtx = useContext(AuthContext);
 
@@ -23,8 +24,8 @@ const ProfileForm = () => {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(res => {
-    
+    }).then(() => {
+      navigate('/');
     });
   };
 
@@ -32,7 +33,7 @@ const ProfileForm = () => {
     <form className={classes.form} onSubmit={submitHandler}>
       <div className={classes.control}>
         <label htmlFor='new-password'>New Password</label>
-        <input type='password' id='new-password' minLength="7" ref={newPasswordInputRef} />
+        <input type='password' id='new-password' minLength='7' ref={newPasswordInputRef} />
       </div>
       <div className={classes.action}>
         <button>Change Password</button>
