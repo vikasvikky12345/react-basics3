@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate } from 'react-router-dom';
 import firebase from './firebase';
 import Header from './Components/Header';
 import Title from './Components/Title';
@@ -17,10 +17,13 @@ import Signup from './Components/Signup';
 const App = () => {
   const [user, setUser] = useState(null);
   const [showCart, setShowCart] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
       setUser(user);
+      setLoggedIn(!!user);
     });
 
     return () => unsubscribe();
@@ -29,6 +32,7 @@ const App = () => {
   const handleLogout = async () => {
     try {
       await firebase.auth().signOut();
+      setLoggedIn(false);
     } catch (error) {
       console.log(error.message);
     }
@@ -102,7 +106,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route
               path="/store"
-              element={<ProductList products={products} />}
+              element={loggedIn ? <ProductList products={products} toggleCart={toggleCart} /> : <Navigate to="/login" />}
             />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<ContactUs />} />
