@@ -45,5 +45,4 @@ const Cart = ({ toggleCart }) => {
     </div>
   );
 };
-
 export default Cart;
