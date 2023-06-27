@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignupForm from './Pages/SignUp';
 import Login from './Pages/Login';
 import Home from './Pages/Home';
+import ProfileUpdate from './Pages/ProfileUpdate';
 
 
 const App = () => {
@@ -12,9 +13,10 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/signup" element={<SignupForm />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/home" element={< Home/>} />
-          <Route path="*" element={<SignupForm />} />
+          <Route path="/update-profile" element={<ProfileUpdate />} />
+          <Route path="login" element={<Login />} />
         </Routes>
       </Router>
     </div>

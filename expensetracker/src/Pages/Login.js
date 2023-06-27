@@ -1,4 +1,4 @@
-import React, {useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -7,6 +7,25 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkProfileComplete = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+
+        // Check if the user is logged in and their profile is complete
+        if (user && !user.displayName) {
+          // Redirect to the profile update page
+          navigate('/update-profile');
+        }
+      } catch (error) {
+        console.log('Error checking profile completion:', error);
+      }
+    };
+
+    checkProfileComplete();
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -21,8 +40,6 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       localStorage.setItem('token', user.accessToken);
-
-      // Redirect to the home page
       navigate('/home');
     } catch (error) {
       setError(error.message);

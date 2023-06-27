@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProfileIncomplete from './ProfileIncomplete';
+import { Link } from 'react-router-dom';
 import ProfileUpdate from './ProfileUpdate';
 
 const Home = () => {
@@ -18,13 +18,18 @@ const Home = () => {
 
   return (
     <div>
-      {isProfileComplete && <h1>Welcome to Expense Tracker</h1>}
-      {!isProfileComplete && (
+      {isProfileComplete ? (
+        <h1>Welcome to Expense Tracker</h1>
+      ) : (
         <>
-          <ProfileIncomplete setProfileComplete={setProfileComplete} />
-          <ProfileUpdate setProfileComplete={setProfileComplete} />
+          <h2>Your profile is incomplete</h2>
+          <p>Please complete your profile to continue.</p>
+          <Link to="/profileupdate">
+            <button>Complete Profile</button>
+          </Link>
         </>
       )}
+      {!isProfileComplete && <ProfileUpdate setProfileComplete={setProfileComplete} />}
     </div>
   );
 };

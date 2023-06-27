@@ -2,6 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const ProfileIncomplete = ({ setProfileComplete }) => {
+  const handleCompleteProfile = () => {
+    setProfileComplete(true);
+  };
+
   return (
     <div>
       <h2>Your profile is incomplete</h2>

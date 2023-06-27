@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAuth, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,6 +6,29 @@ const ProfileUpdate = ({ setProfileComplete }) => {
   const navigate = useNavigate();
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const auth = getAuth();
+        const user = auth.currentUser;
+        const idToken = await user.getIdToken();
+
+        // Make a GET request to fetch the user profile data from the Firebase database
+        const response = await fetch(`https://expensetracker-acdfa-default-rtdb.firebaseio.com/users/${user.uid}.json?auth=${idToken}`);
+        const data = await response.json();
+
+        if (data && data.displayName) {
+          // Pre-fill the input form with the fetched display name
+          setDisplayName(data.displayName);
+        }
+      } catch (error) {
+        console.log('Error fetching user profile:', error);
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
@@ -19,17 +42,25 @@ const ProfileUpdate = ({ setProfileComplete }) => {
       const auth = getAuth();
       const user = auth.currentUser;
 
-      if (!user) {
-        // Handle the case when the user is not authenticated
-        setError('User is not authenticated.');
-        return;
-      }
-
+      // Update the display name using Firebase Auth API
       await updateProfile(user, { displayName });
+
+      // Update the user profile data in the Firebase database
+      const idToken = await user.getIdToken();
+      await fetch(`https://expensetracker-acdfa-default-rtdb.firebaseio.com/users/${user.uid}.json?auth=${idToken}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ displayName }),
+      });
+
+      // Update the profile status
+      localStorage.setItem('displayName', displayName);
+      
 
       // Redirect to the home page
       navigate('/home');
-      setProfileComplete(true); // Set profile completion status to true
     } catch (error) {
       setError(error.message);
     }
