@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import ProfileUpdate from './ProfileUpdate';
+import SendVerificationEmail from './SendVerificationMail';
+
 
 const Home = () => {
   const [isProfileComplete, setProfileComplete] = useState(false);
@@ -19,7 +21,10 @@ const Home = () => {
   return (
     <div>
       {isProfileComplete ? (
-        <h1>Welcome to Expense Tracker</h1>
+        <>
+          <h1>Welcome to Expense Tracker</h1>
+          <SendVerificationEmail />
+        </>
       ) : (
         <>
           <h2>Your profile is incomplete</h2>
