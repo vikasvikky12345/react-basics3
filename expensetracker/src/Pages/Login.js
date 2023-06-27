@@ -19,8 +19,11 @@ const Login = () => {
     }
 
     try {
-        const auth = getAuth(app)
-      await signInWithEmailAndPassword(auth, email, password);
+      const auth = getAuth(app);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      localStorage.setItem('token', user.accessToken);
+      
       setLoggedIn(true);
     } catch (error) {
       setError(error.message);
@@ -28,7 +31,7 @@ const Login = () => {
   };
 
   if (loggedIn) {
-    return <Navigate to="/" />;
+    return <Navigate to="/home" />;
   }
 
   return (
