@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, {useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import app from '../firebase';
-import { Link, Navigate } from 'react-router-dom';
-import './Login.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,20 +17,17 @@ const Login = () => {
     }
 
     try {
-      const auth = getAuth(app);
+      const auth = getAuth();
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       localStorage.setItem('token', user.accessToken);
-      
-      setLoggedIn(true);
+
+      // Redirect to the home page
+      navigate('/home');
     } catch (error) {
       setError(error.message);
     }
   };
-
-  if (loggedIn) {
-    return <Navigate to="/home" />;
-  }
 
   return (
     <div>
