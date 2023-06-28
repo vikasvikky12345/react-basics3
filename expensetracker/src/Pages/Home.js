@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProfileUpdate from './ProfileUpdate';
+import ExpenseForm from './ExpenseForm';
+import styles from './Home.module.css';
 
 const Home = () => {
   const [isProfileComplete, setProfileComplete] = useState(false);
   const [isEmailVerified, setEmailVerified] = useState(false);
+  const [expenses, setExpenses] = useState([]);
 
   useEffect(() => {
-    // Check if the user's profile is complete (replace this with your logic)
     const checkProfileCompletion = () => {
-      // Assume that the user's profile is complete if the 'displayName' property exists
       const isComplete = !!localStorage.getItem('displayName');
       setProfileComplete(isComplete);
     };
@@ -18,43 +18,69 @@ const Home = () => {
   }, []);
 
   const handleVerifyEmail = () => {
-    // Send verification email logic here
-    // Once the email is successfully verified, set isEmailVerified to true
     setEmailVerified(true);
-    // Show alert message
     alert('Email verified!');
   };
 
+  const handleAddExpense = (expense) => {
+    setExpenses([...expenses, expense]);
+  };
+
   return (
-    <div className="home-container">
-      <div className="home-header">
-        <h1 className="welcome-heading">Welcome to Expense Tracker</h1>
+    <div className={styles.homeContainer}>
+      <div className={styles.homeHeader}>
+        <h1 className={styles.welcomeHeading}>Welcome to Expense Tracker</h1>
         {isProfileComplete && !isEmailVerified && (
-          <button className="logout-button">
+          <button className={styles.logoutButton}>
             <Link to="/login">Logout</Link>
           </button>
         )}
       </div>
 
       {!isEmailVerified && (
-        <div className="home-content">
-          {!isProfileComplete && (
+        <div className={styles.homeContent}>
+          {!isProfileComplete ? (
             <>
               <h2>Your profile is incomplete</h2>
               <p>Please complete your profile to continue.</p>
-              <Link to="/profileupdate">
-                <button>Complete Profile</button>
+              <Link to="/update-profile">
+                <button className="complete-profile-button">Complete Profile</button>
               </Link>
             </>
-          )}
-          {!isProfileComplete && <ProfileUpdate setProfileComplete={setProfileComplete} />}
-          {isProfileComplete && (
+          ) : (
             <div>
               <button className="verify-email-button" onClick={handleVerifyEmail}>
                 Verify Email
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {isEmailVerified && (
+        <div className={styles.homeContent}>
+          <div className={styles.formContainer}>
+            <ExpenseForm onAddExpense={handleAddExpense} />
+            <button className={styles.logoutButton}>
+              <Link to="/login">Logout</Link>
+            </button>
+          </div>
+          <div className={styles.expenseList}>
+            <h2>Expenses</h2>
+            {expenses.length === 0 ? (
+              <p>No expenses added yet.</p>
+            ) : (
+              <ul>
+                {expenses.map((expense, index) => (
+                  <li key={index}>
+                    <span>{expense.amount}</span>
+                    <span>{expense.description}</span>
+                    <span>{expense.category}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
       )}
     </div>
