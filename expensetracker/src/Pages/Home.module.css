@@ -1,3 +1,4 @@
+/* Home.module.css */
 .homeContainer {
   text-align: center;
   display: flex;
@@ -25,9 +26,11 @@
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+}
+
+.logoutButton a {
+  color: white;
+  text-decoration: none;
 }
 
 .logoutButton:hover {
@@ -42,30 +45,39 @@
   justify-content: center;
 }
 
-.formContainer {
-  margin-bottom: 20px;
-}
-
-.expenseList {
-  text-align: left;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.expenseList h2 {
-  font-size: 20px;
-}
-
-.expenseList p {
+.completeProfileButton,
+.verifyEmailButton {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
   margin-top: 10px;
 }
 
-.expenseList ul {
-  list-style: none;
-  padding: 0;
+.completeProfileButton:hover,
+.verifyEmailButton:hover {
+  background-color: #2980b9;
 }
 
-.expenseList li {
+.expensesHeading {
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+.noExpensesMessage {
+  margin-top: 10px;
+}
+
+.expensesList {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.expenseItem {
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
@@ -75,20 +87,58 @@
   border-radius: 4px;
 }
 
-.expenseList li span {
-  display: inline-block;
-  margin-right: 10px;
+.expenseDetails {
+  flex: 1;
+  display: flex;
+  align-items: center;
 }
-.expenseList li span:nth-child(1) {
+
+.expenseAmount {
   flex: 1;
   margin-right: 10px;
 }
 
-.expenseList li span:nth-child(2) {
+.expenseDescription {
   flex: 2;
   margin-right: 10px;
 }
 
-.expenseList li span:nth-child(3) {
+.expenseCategory {
   flex: 1;
+}
+
+.expenseActions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.deleteButton {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.deleteButton:hover {
+  background-color: #c0392b;
+}
+
+.editButton {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.editButton:hover {
+  background-color: #2980b9;
 }
