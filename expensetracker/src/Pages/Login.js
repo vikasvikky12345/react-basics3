@@ -13,10 +13,7 @@ const Login = () => {
       try {
         const auth = getAuth();
         const user = auth.currentUser;
-
-        // Check if the user is logged in and their profile is complete
         if (user && !user.displayName) {
-          // Redirect to the profile update page
           navigate('/update-profile');
         }
       } catch (error) {
@@ -60,6 +57,9 @@ const Login = () => {
           <label htmlFor="password">Password</label>
           <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
+        <p>
+        <Link to="/forgot-password">Forgot password?</Link>
+        </p>
         <button className="login-button" type="submit">
           Login
         </button>
