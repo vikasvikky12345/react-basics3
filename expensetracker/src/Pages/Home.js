@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ExpenseForm from './ExpenseForm';
+import { getDatabase, ref, push, onValue } from 'firebase/database';
 import styles from './Home.module.css';
 
 const Home = () => {
   const [isProfileComplete, setProfileComplete] = useState(false);
   const [isEmailVerified, setEmailVerified] = useState(false);
   const [expenses, setExpenses] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const checkProfileCompletion = () => {
@@ -15,6 +17,29 @@ const Home = () => {
     };
 
     checkProfileCompletion();
+  }, []);
+
+  useEffect(() => {
+    const database = getDatabase();
+    const expensesRef = ref(database, 'expenses');
+
+    const fetchExpenses = () => {
+      onValue(expensesRef, (snapshot) => {
+        const expensesData = snapshot.val();
+        if (expensesData) {
+          const expensesList = Object.keys(expensesData).map((key) => ({
+            id: key,
+            ...expensesData[key],
+          }));
+          setExpenses(expensesList);
+        }
+      });
+    };
+
+    fetchExpenses();
+
+    return () => {
+    };
   }, []);
 
   const handleVerifyEmail = () => {
@@ -71,8 +96,8 @@ const Home = () => {
               <p>No expenses added yet.</p>
             ) : (
               <ul>
-                {expenses.map((expense, index) => (
-                  <li key={index}>
+                {expenses.map((expense) => (
+                  <li key={expense.id}>
                     <span>{expense.amount}</span>
                     <span>{expense.description}</span>
                     <span>{expense.category}</span>

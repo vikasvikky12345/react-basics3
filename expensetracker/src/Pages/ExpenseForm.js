@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getDatabase, ref, push } from 'firebase/database';
 import styles from './ExpenseForm.module.css';
 
 const ExpenseForm = ({ onAddExpense }) => {
@@ -12,9 +13,20 @@ const ExpenseForm = ({ onAddExpense }) => {
       const newExpense = {
         amount,
         description,
-        category
+        category,
       };
-      onAddExpense(newExpense);
+
+      const database = getDatabase();
+      const expensesRef = ref(database, 'expenses');
+      push(expensesRef, newExpense)
+        .then((ref) => {
+          console.log('Expense stored successfully!');
+          onAddExpense({ id: ref.key, ...newExpense });
+        })
+        .catch((error) => {
+          console.log('Error storing expense:', error);
+        });
+
       setAmount('');
       setDescription('');
       setCategory('');
@@ -26,11 +38,15 @@ const ExpenseForm = ({ onAddExpense }) => {
       <h2 className={styles.formHeading}>Expense Form</h2>
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
-          <label htmlFor="amount" className={styles.label}>Amount</label>
+          <label htmlFor="amount" className={styles.label}>
+            Amount
+          </label>
           <input type="text" id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
         </div>
         <div className={styles.formGroup}>
-          <label htmlFor="description" className={styles.label}>Description</label>
+          <label htmlFor="description" className={styles.label}>
+            Description
+          </label>
           <input
             type="text"
             id="description"
@@ -39,7 +55,9 @@ const ExpenseForm = ({ onAddExpense }) => {
           />
         </div>
         <div className={styles.formGroup}>
-          <label htmlFor="category" className={styles.label}>Category</label>
+          <label htmlFor="category" className={styles.label}>
+            Category
+          </label>
           <select id="category" value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="">Select a category</option>
             <option value="Food">Food</option>
@@ -51,7 +69,9 @@ const ExpenseForm = ({ onAddExpense }) => {
           </select>
         </div>
         <div className={styles.formGroup}>
-          <button className={styles.addExpenseButton} type="submit">Add Expense</button>
+          <button className={styles.addExpenseButton} type="submit">
+            Add Expense
+          </button>
         </div>
       </form>
     </div>
