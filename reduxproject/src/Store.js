@@ -9,6 +9,23 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 const usersRef = ref(database, 'users');
 
+const themeSlice = createSlice({
+  name: 'theme',
+  initialState: 'light',
+  reducers: {
+    toggleTheme: (state) => (state === 'light' ? 'dark' : 'light'),
+  },
+});
+
+const premiumSlice = createSlice({
+  name: 'premium',
+  initialState: false,
+  reducers: {
+    activatePremium: (state) => true,
+    disablePremium: (state) => false,
+  },
+});
+
 export const signupUser = createAsyncThunk(
   'auth/signupUser',
   async ({ email, password }, { rejectWithValue }) => {
@@ -100,12 +117,15 @@ export const updateUserProfile = createAsyncThunk(
   }
 );
 
+export const { activatePremium, disablePremium } = premiumSlice.actions;
+
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: JSON.parse(localStorage.getItem('user')) || null,
     error: null,
     profileComplete: false,
+    isPremiumActivated: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -140,7 +160,21 @@ const authSlice = createSlice({
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.error = action.payload;
+      })
+      .addCase(activatePremium, (state) => {
+        state.isPremiumActivated = true;
+      })
+      .addCase(disablePremium, (state) => {
+        state.isPremiumActivated = false;
       });
+  },
+});
+
+export const store = configureStore({
+  reducer: {
+    auth: authSlice.reducer,
+    theme: themeSlice.reducer,
+    premium: premiumSlice.reducer,
   },
 });
 
@@ -159,12 +193,7 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 export const { signupSuccess, signupFailure, loginSuccess, loginFailure } = authSlice.actions;
-
-export const store = configureStore({
-  reducer: {
-    auth: authSlice.reducer,
-  },
-});
+export const { toggleTheme } = themeSlice.actions;
 
 // Subscribe to store changes and update localStorage accordingly
 store.subscribe(() => {

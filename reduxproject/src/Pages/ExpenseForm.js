@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { getDatabase, ref, onValue, push, remove, set } from 'firebase/database';
 import { auth } from '../firebase'; // Update the path to your firebase.js file
+import './ExpenseForm.css';
+import { activatePremium, disablePremium } from '../Store';
 
 const database = getDatabase();
 
 const ExpenseForm = () => {
+  const dispatch = useDispatch();
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -12,8 +16,13 @@ const ExpenseForm = () => {
   const [editMode, setEditMode] = useState(false);
   const [editExpenseId, setEditExpenseId] = useState('');
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [activatePremiumVisible, setActivatePremiumVisible] = useState(false);
+  const [downloadButtonVisible, setDownloadButtonVisible] = useState(false);
+  const [isBackgroundEnabled, setIsBackgroundEnabled] = useState(false);
 
   const userId = auth.currentUser?.uid; // Get the current user's UID if it exists
+
+  const isPremiumActivated = useSelector((state) => state.auth.isPremiumActivated);
 
   const fetchExpenses = () => {
     if (userId) {
@@ -42,6 +51,18 @@ const ExpenseForm = () => {
   const calculateTotalExpenses = (expensesList) => {
     const total = expensesList.reduce((sum, expense) => sum + Number(expense.price), 0);
     setTotalExpenses(total);
+
+    if (total >= 10000 && !isPremiumActivated) {
+      setActivatePremiumVisible(true);
+    } else {
+      setActivatePremiumVisible(false);
+    }
+
+    if (total >= 10000) {
+      setDownloadButtonVisible(true);
+    } else {
+      setDownloadButtonVisible(false);
+    }
   };
 
   const addExpense = () => {
@@ -106,12 +127,33 @@ const ExpenseForm = () => {
   };
 
   const handleActivatePremium = () => {
-    // Logic to handle premium activation
-    console.log('Activate Premium');
+    if (totalExpenses >= 10000) {
+      dispatch(activatePremium());
+      setIsBackgroundEnabled(true);
+    }
+  };
+
+  const handleDisableBackground = () => {
+    dispatch(disablePremium());
+    setIsBackgroundEnabled(false);
+  };
+
+  const downloadExpenses = () => {
+    const csvContent = expenses
+      .map((expense) => `${expense.price},${expense.description},${expense.category}`)
+      .join('\n');
+
+    const element = document.createElement('a');
+    const file = new Blob([csvContent], { type: 'text/csv' });
+    element.href = URL.createObjectURL(file);
+    element.download = 'expenses.csv';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   return (
-    <div>
+    <div className={isBackgroundEnabled ? 'premium-background' : ''}>
       <h2>Expense Form</h2>
       <label htmlFor="price">Price:</label>
       <input
@@ -164,7 +206,17 @@ const ExpenseForm = () => {
         ))}
       </ul>
 
-      {totalExpenses > 10000 && <button onClick={handleActivatePremium}>Activate Premium</button>}
+      {activatePremiumVisible && !isPremiumActivated && (
+        <button onClick={handleActivatePremium}>Activate Premium</button>
+      )}
+
+      {isBackgroundEnabled && (
+        <button onClick={handleDisableBackground}>Disable Background</button>
+      )}
+
+      {downloadButtonVisible && (
+        <button onClick={downloadExpenses}>Download File</button>
+      )}
     </div>
   );
 };
