@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
 import { app } from './firebase';
 
@@ -18,6 +18,15 @@ export const signup = createAsyncThunk('auth/signup', async ({ email, password }
   }
 });
 
+export const login = createAsyncThunk('auth/login', async ({ email, password }, { rejectWithValue }) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    return { email };
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -29,6 +38,10 @@ const authSlice = createSlice({
       state.user = null;
       state.error = action.payload;
     },
+    loginFailure:(state,action) =>{
+        state.user = null;
+        state.error = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -44,9 +57,23 @@ const authSlice = createSlice({
       .addCase(signup.rejected, (state, action) => {
         state.user = null;
         state.error = action.payload;
+      })
+      .addCase(login.pending, (state) => {
+        state.user = null;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action) => {
+        const { email } = action.payload;
+        state.user = { email };
+        state.error = null;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.user = null;
+        state.error = action.payload;
       });
   },
 });
-export const { clearError, signupFailure } = authSlice.actions;
+
+export const { clearError, signupFailure,loginFailure } = authSlice.actions;
 
 export default authSlice.reducer;

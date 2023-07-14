@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup, clearError,signupFailure } from '../authSlice';
+import {Link} from 'react-router-dom'
 import './SignUp.css';
 
 const SignUp = () => {
@@ -69,6 +70,9 @@ const SignUp = () => {
           Sign Up
         </Button>
       </Form>
+      <p>
+        Already a User? <Link to="/login">Login</Link>
+      </p>
     </div>
   );
 };
