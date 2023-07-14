@@ -47,7 +47,6 @@ const authSlice = createSlice({
       });
   },
 });
-
 export const { clearError, signupFailure } = authSlice.actions;
 
 export default authSlice.reducer;
