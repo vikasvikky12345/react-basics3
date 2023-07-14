@@ -28,7 +28,7 @@ const SignUp = () => {
       return;
     }
 
-    dispatch(signup({ email, password }));
+    dispatch(signup({ email:email, password:password }));
   };
 
   return (
