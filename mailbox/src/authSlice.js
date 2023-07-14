@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import { getAuth } from 'firebase/auth';
-import { app } from './firebase';
+import { app, db } from './firebase';
+import { push,ref } from 'firebase/database';
 
 const auth = getAuth(app);
 const initialState = {
   user: null,
   error: null,
+  sentEmails: [],
 };
 
 export const signup = createAsyncThunk('auth/signup', async ({ email, password }, { rejectWithValue }) => {
@@ -27,6 +29,16 @@ export const login = createAsyncThunk('auth/login', async ({ email, password }, 
   }
 });
 
+export const sendEmail = createAsyncThunk('auth/sendEmail', async (emailData, { rejectWithValue, dispatch }) => {
+  try {
+    await push(db.ref('emails'), emailData);
+    dispatch(sendEmailSuccess(emailData));
+    return emailData;
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -38,10 +50,13 @@ const authSlice = createSlice({
       state.user = null;
       state.error = action.payload;
     },
-    loginFailure:(state,action) =>{
-        state.user = null;
-        state.error = action.payload;
-    }
+    loginFailure: (state, action) => {
+      state.user = null;
+      state.error = action.payload;
+    },
+    sendEmailSuccess: (state, action) => {
+      state.sentEmails.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -70,10 +85,16 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.user = null;
         state.error = action.payload;
+      })
+      .addCase(sendEmail.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(sendEmail.rejected, (state, action) => {
+        state.error = action.payload;
       });
   },
 });
 
-export const { clearError, signupFailure,loginFailure } = authSlice.actions;
+export const { clearError, signupFailure, loginFailure, sendEmailSuccess } = authSlice.actions;
 
 export default authSlice.reducer;
