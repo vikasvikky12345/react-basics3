@@ -10,6 +10,7 @@ const Inbox = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const [emails, setEmails] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
   const userEmailsQueryRef = useRef(null);
 
   useEffect(() => {
@@ -28,14 +29,23 @@ const Inbox = () => {
               ...emailData[key],
             }));
             setEmails(emailList);
+            updateUnreadCount(emailList);
           } else {
             setEmails([]);
+            updateUnreadCount([]);
           }
         });
 
         dispatch(fetchEmails(user.email));
         console.log('User:', user);
       }
+    };
+
+    const updateUnreadCount = (emails) => {
+      const count = emails.reduce((acc, email) => {
+        return acc + (email.read ? 0 : 1);
+      }, 0);
+      setUnreadCount(count);
     };
 
     fetchUserEmails();
