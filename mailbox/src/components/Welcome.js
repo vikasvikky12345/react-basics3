@@ -4,7 +4,6 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { push, ref } from 'firebase/database';
 import { db } from '../firebase';
-import { Link } from 'react-router-dom';
 
 const Welcome = () => {
   const user = useSelector((state) => state.auth.user);
@@ -15,26 +14,21 @@ const Welcome = () => {
   const handleSendEmail = (e) => {
     e.preventDefault();
 
-    // Prepare the email data
     const emailData = {
       receiver,
       subject,
       content,
-      sender: user.email, // Assuming user.email contains the sender's email
+      sender: user.email, 
     };
 
-    // Save the email to the database
     const emailsRef = ref(db, 'emails');
     push(emailsRef, emailData)
       .then(() => {
-        // Email saved successfully
-        // Clear the form fields
         setReceiver('');
         setSubject('');
         setContent('');
       })
       .catch((error) => {
-        // Handle the error
         console.log('Error sending email:', error);
       });
   };
@@ -59,9 +53,6 @@ const Welcome = () => {
           <ReactQuill value={content} onChange={(value) => setContent(value)} />
           <button type="submit">Send Email</button>
         </form>
-      </div>
-      <div className="inbox-link-container">
-        <Link to="/inbox">Go to Inbox</Link>
       </div>
     </div>
   );

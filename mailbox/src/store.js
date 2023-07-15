@@ -1,8 +1,14 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import authReducer from './authSlice';
+import inboxReducer from './inboxSlice';
+
+const rootReducer = combineReducers({
+  auth: authReducer,
+  inbox: inboxReducer,
+});
+
 const store = configureStore({
-    reducer:{
-        auth:authReducer
-    }
-})
+  reducer: rootReducer,
+});
+
 export default store;
