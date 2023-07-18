@@ -1,5 +1,4 @@
-function AboutUs(){
-    return(<h1>The About Us Page</h1>)
-
+function about(){
+  return(<h1>the about page</h1>)
 }
-export default AboutUs;
+export default about;
