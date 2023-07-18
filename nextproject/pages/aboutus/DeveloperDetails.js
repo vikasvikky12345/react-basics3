@@ -29,5 +29,4 @@ const DeveloperDetails = () => {
     </div>
   );
 };
-
 export default DeveloperDetails;
