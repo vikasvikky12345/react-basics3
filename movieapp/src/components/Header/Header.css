@@ -1,0 +1,17 @@
+.header{
+    background-color: rgba(22, 8, 8, 0.979);
+    height:72px;
+    padding:0px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo{
+    color:azure;
+    font-size: 20px;
+    font-weight: 600px;
+}
+.user-image,.user-image img{
+    width:38px;
+    height:38px
+}

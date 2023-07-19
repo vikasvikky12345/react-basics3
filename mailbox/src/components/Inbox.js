@@ -84,7 +84,7 @@ const Inbox = () => {
               <div className="email-info">
                 <button onClick={() => handleDeleteEmail(email.id)}>Delete</button>
                 <Link to={`/inbox/${email.id}`} onClick={() => handleEmailClick(email.id)}>
-                  <p className="email-subject">{email.subject}</p>
+                  <p className="email-subject">Subject: {email.subject}</p>
                   <p className="email-sender">From: {email.sender}</p>
                   {!email.read && <div className="blue-dot" />}
                 </Link>

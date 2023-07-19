@@ -36,10 +36,7 @@ export const signupUser = createAsyncThunk(
         email: userCredential.user.email,
         password: password,
       };
-
-      // Store user data in the Firebase Realtime Database
       await set(usersRef, user);
-
       console.log('User has successfully signed up.');
       return user;
     } catch (error) {
@@ -183,8 +180,6 @@ auth.onAuthStateChanged(async (user) => {
     try {
       const snapshot = await get(ref(database, 'users/' + user.uid));
       const userData = snapshot.val();
-
-      // Dispatch an action to update the user data in the store
       store.dispatch(loginUser.fulfilled(userData));
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -194,8 +189,6 @@ auth.onAuthStateChanged(async (user) => {
 
 export const { signupSuccess, signupFailure, loginSuccess, loginFailure } = authSlice.actions;
 export const { toggleTheme } = themeSlice.actions;
-
-// Subscribe to store changes and update localStorage accordingly
 store.subscribe(() => {
   const user = store.getState().auth.user;
   localStorage.setItem('user', JSON.stringify(user));

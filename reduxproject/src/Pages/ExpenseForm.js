@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getDatabase, ref, onValue, push, remove, set } from 'firebase/database';
-import { auth } from '../firebase'; // Update the path to your firebase.js file
-import './ExpenseForm.css';
+import { auth } from '../firebase';
 import { activatePremium, disablePremium } from '../Store';
+import styles from './ExpenseForm.module.css';
 
 const database = getDatabase();
 
@@ -20,7 +20,7 @@ const ExpenseForm = () => {
   const [downloadButtonVisible, setDownloadButtonVisible] = useState(false);
   const [isBackgroundEnabled, setIsBackgroundEnabled] = useState(false);
 
-  const userId = auth.currentUser?.uid; // Get the current user's UID if it exists
+  const userId = auth.currentUser?.uid;
 
   const isPremiumActivated = useSelector((state) => state.auth.isPremiumActivated);
 
@@ -46,7 +46,7 @@ const ExpenseForm = () => {
 
   useEffect(() => {
     fetchExpenses();
-  }, [userId]); // Fetch expenses when the user ID changes
+  }, [userId]);
 
   const calculateTotalExpenses = (expensesList) => {
     const total = expensesList.reduce((sum, expense) => sum + Number(expense.price), 0);
@@ -153,29 +153,37 @@ const ExpenseForm = () => {
   };
 
   return (
-    <div className={isBackgroundEnabled ? 'premium-background' : ''}>
-      <h2>Expense Form</h2>
+    <div className={`${styles.container} ${isBackgroundEnabled ? styles.premiumBackground : ''}`}>
+      <div className={styles.heading}>
+        <h2>Expense Form</h2>
+        {activatePremiumVisible && !isPremiumActivated && (
+          <button onClick={handleActivatePremium} className={styles.activatePremiumButton}>
+            Activate Premium
+          </button>
+        )}
+      </div>
       <label htmlFor="price">Price:</label>
       <input
         type="number"
         id="price"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-      />
-
+        className={styles.input}
+      /><br/>
       <label htmlFor="description">Description:</label>
       <input
         type="text"
         id="description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-      />
-
+        className={styles.input}
+      /><br/>
       <label htmlFor="category">Category:</label>
       <select
         id="category"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
+        className={styles.select}
       >
         <option value="">Select category</option>
         <option value="food">Food</option>
@@ -183,39 +191,48 @@ const ExpenseForm = () => {
         <option value="shopping">Shopping</option>
         <option value="movie">Movie</option>
         <option value="lunch">Lunch</option>
-      </select>
-
+      </select><br/>
       {editMode ? (
         <div>
-          <button onClick={updateExpense}>Update Expense</button>
-          <button onClick={cancelEdit}>Cancel</button>
+          <button onClick={updateExpense} className={styles.updateButton}>
+            Update Expense
+          </button>
+          <button onClick={cancelEdit} className={styles.cancelButton}>
+            Cancel
+          </button>
         </div>
       ) : (
-        <button onClick={addExpense}>Add Expense</button>
+        <button onClick={addExpense} className={styles.addButton}>
+          Add Expense
+        </button>
       )}
 
       <h2>Expense List</h2>
-      <ul>
+      <ul className={styles.list}>
         {expenses.map((expense) => (
           <li key={expense.id}>
             <span>{expense.price}</span> - <span>{expense.description}</span> -{' '}
             <span>{expense.category}</span>
-            <button onClick={() => deleteExpense(expense.id)}>Delete</button>
-            <button onClick={() => editExpense(expense)}>Edit</button>
+            <button onClick={() => deleteExpense(expense.id)} className={styles.deleteButton}>
+              Delete
+            </button>
+            <button onClick={() => editExpense(expense)} className={styles.editButton}>
+              Edit
+            </button>
           </li>
         ))}
       </ul>
 
-      {activatePremiumVisible && !isPremiumActivated && (
-        <button onClick={handleActivatePremium}>Activate Premium</button>
-      )}
-
       {isBackgroundEnabled && (
-        <button onClick={handleDisableBackground}>Disable Background</button>
+        <button onClick={handleDisableBackground} className={styles.disableBackgroundButton}>
+          Disable Background
+        </button>
       )}
 
       {downloadButtonVisible && (
-        <button onClick={downloadExpenses}>Download File</button>
+        <button onClick={downloadExpenses} className={styles.downloadButton}>
+          Download File
+        </button>
       )}
     </div>
   );

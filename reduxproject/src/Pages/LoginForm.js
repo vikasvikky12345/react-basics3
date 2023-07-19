@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser, loginFailure } from '../Store';
 import { Link, useNavigate } from 'react-router-dom';
+import styles from './LoginForm.module.css';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -30,29 +31,33 @@ const LoginForm = () => {
   }, [user, navigate]);
 
   return (
-    <div>
+    <div className={styles.loginForm}>
       <form onSubmit={handleLogin}>
-        {error && <p>{error}</p>}
+        {error && <p className={styles.error}>{error}</p>}
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-        />
+          className={styles.input}
+        /><br/>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-        />
-        <p>
+          className={styles.input}
+        /><br/>
+        <p className={styles.forgotPassword}>
           <Link to="/forgot-password" onClick={handlePasswordChange}>
             Forgot password?
           </Link>
         </p>
-        <button type="submit">Login</button>
+        <button type="submit" className={styles.button}>
+          Login
+        </button>
       </form>
-      <p>
+      <p className={styles.signupText}>
         Don't have an account? <Link to="/signup">Sign Up</Link>
       </p>
     </div>

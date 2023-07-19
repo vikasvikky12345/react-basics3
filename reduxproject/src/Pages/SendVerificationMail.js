@@ -6,8 +6,6 @@ const SendVerificationEmail = () => {
     try {
       const auth = getAuth();
       const user = auth.currentUser;
-
-      // Send the verification email
       await fetch(
         `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBePOlrRjt7rixWrm4c79EgFI6bAvMeJLE`,
         {
@@ -21,11 +19,8 @@ const SendVerificationEmail = () => {
           }),
         }
       );
-
-      // Show a success message to the user
       alert('Verification email sent. Please check your email inbox.');
     } catch (error) {
-      // Handle any errors that occur during the request
       console.error('Error sending verification email:', error);
       alert('Failed to send verification email. Please try again later.');
     }
@@ -33,7 +28,7 @@ const SendVerificationEmail = () => {
 
   return (
     <div>
-      <h2>Verify Email</h2>
+      <h4>Verify Email</h4>
       <button onClick={handleSendVerificationEmail}>Send Verification Email</button>
     </div>
   );

@@ -3,9 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import SendVerificationEmail from './SendVerificationMail';
 import { logoutUser } from '../Store';
-import { remove, ref,getDatabase } from 'firebase/database';
-import {app } from '../firebase';
+import { remove, ref, getDatabase } from 'firebase/database';
+import { app } from '../firebase';
 import ExpenseForm from './ExpenseForm';
+import './WelcomeScreen.css';
+
 const database = getDatabase(app);
 
 const WelcomeScreen = () => {
@@ -33,14 +35,21 @@ const WelcomeScreen = () => {
   }
 
   return (
-    <div>
-      <h1>Welcome to the expense tracker!</h1>
+    <div className="container">
+      <h1 className="header">Welcome to the expense tracker!</h1>
       <SendVerificationEmail />
-      <p>
-        <Link to="/updateuser">Update User</Link>
-      </p>
-      <button onClick={handleLogout}>Logout</button>
-      <ExpenseForm/>
+      <div className="buttons">
+        <Link to="/updateuser" className="updateUserButton">Update User</Link>
+        <button
+          onClick={handleLogout}
+          className="logoutButton"
+        >
+          Logout
+        </button>
+      </div>
+      <div className="expenseForm">
+        <ExpenseForm />
+      </div>
     </div>
   );
 };

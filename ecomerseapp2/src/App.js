@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes,Navigate } from 'react-router-dom';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import firebase from './firebase';
 import Header from './Components/Header';
 import Title from './Components/Title';
-import ProductList from './Components/ProductList';
 import Footer from './Components/Footer';
-import Cart from './Components/Cart';
 import { CartProvider } from './Store1/CartContext';
-import ProductPage from './Components/ProductPage';
 
-import Home from './Components/Home';
-import About from './Components/About';
-import ContactUs from './Components/ContactUs';
-import Login from './Components/Login';
-import Signup from './Components/Signup';
+const Home = lazy(() => import('./Pages/Home'));
+const About = lazy(() => import('./Pages/About'));
+const ContactUs = lazy(() => import('./Pages/ContactUs'));
+const Login = lazy(() => import('./Pages/Login'));
+const Signup = lazy(() => import('./Pages/Signup'));
+const ProductPage = lazy(() => import('./Pages/ProductPage'));
+const ProductList = lazy(() => import('./Components/ProductList'));
+const Cart = lazy(() => import('./Components/Cart'));
 const App = () => {
   const [user, setUser] = useState(null);
   const [showCart, setShowCart] = useState(false);
@@ -96,30 +96,25 @@ const App = () => {
     <Router>
       <div>
         <CartProvider>
-          <Header
-            user={user}
-            handleLogout={handleLogout}
-            toggleCart={toggleCart}
-          />
-          <Title/>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/store"
-              element={loggedIn ? <ProductList products={products} toggleCart={toggleCart} /> : <Navigate to="/login" />}
-            />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route
-              path="/product/:id"
-              element={<ProductPage  />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Routes>
-          {showCart && <Cart toggleCart={toggleCart} />}
+          <Header user={user} handleLogout={handleLogout} toggleCart={toggleCart} />
+          <Title />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Routes>
+              <Route path="/homePath" element={<Home />} />
+              <Route
+                path="/storePath"
+                element={loggedIn ? <ProductList products={products} toggleCart={toggleCart} /> : <Navigate to="/loginPath" />}
+              />
+              <Route path="/aboutPath" element={<About />} />
+              <Route path="/contactPath" element={<ContactUs />} />
+              <Route path="/productPath/:id" element={<ProductPage />} />
+              <Route path="/loginPath" element={<Login />} />
+              <Route path="/signupPath" element={<Signup />} />
+            </Routes>
+            {showCart && <Cart toggleCart={toggleCart} />}
+          </Suspense>
+          <Footer />
         </CartProvider>
-        <Footer />
       </div>
     </Router>
   );

@@ -1,0 +1,15 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: 'open Sans',sans-serif;
+}
+a{
+  text-decoration:none;
+}
+body{
+  background: #2d332f;
+}
+.container{
+  margin: 0px 40px;
+}

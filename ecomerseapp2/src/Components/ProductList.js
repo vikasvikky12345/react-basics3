@@ -7,7 +7,7 @@ const ProductList = ({ products }) => {
   return (
     <div className="product-list">
       {products.map((product, index) => (
-        <Link to={`/product/${index}`} key={index} state={{ product }}>
+        <Link to={`/productPath/${index}`} key={index} state={{ product }}>
           <Product product={product} />
         </Link>
       ))}

@@ -1,5 +1,5 @@
 .navbar {
-  background-color: #343a40;
+  background-color: #1aeeee;
   display: flex;
   justify-content: space-between;
   padding: 1rem;
@@ -26,7 +26,7 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #02a152;
+  border-color: #01c090;
   margin-left: 1rem;
 }

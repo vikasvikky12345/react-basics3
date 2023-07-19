@@ -30,9 +30,8 @@ const ProductForm = () => {
     updatedProducts[index].quantity += increment;
     setProducts(updatedProducts);
   };
-  
-
   return (
+    
     <div>
       <form onSubmit={handleSubmit}>
         <div>
